@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Link, Routes,useLocation, useNavigate  , Navigate} from 'react-router-dom';
 import styled from 'styled-components';
-import logo from './logo.png'
 
-
-
-const Logo = styled.img`
+const Logo = styled.h1`
 width: 100px;
-translate: 100px -120px;
+translate: 80px -120px;
+color: white;
 `;
 
 const Form = styled.form`
@@ -32,11 +30,11 @@ const Input = styled.input`
     border-top: 1px solid rgba(255, 255, 255, .2);
     border-left: 1px solid rgba(255, 255, 255, .2);
     outline: none;
-    color: black;
+    color: white;
     padding: 15px;
     margin: 10px;
     ::placeholder{
-      color: black;
+      color: white;
     }
 `;
 
@@ -48,7 +46,7 @@ const Button = styled.button`
     border-left: 1px solid rgba(255, 255, 255, .2);
     border-radius: 14px;
     outline: none;
-    color: black;
+    color: white;
     width: 241px;
     height: 43px;
     margin-top: 20px;
@@ -62,7 +60,7 @@ const Button = styled.button`
 
 const StyledLink = styled(Link)`
   margin: auto;
-  color: black;
+  color: white;
   text-decoration: none;
 `;
 
@@ -111,7 +109,7 @@ const VerifyButton = styled.button`
     border-left: 1px solid rgba(255, 255, 255, .2);
     border-radius: 14px;
     outline: none;
-    color: black;
+    color: white;
     width: 180px;
     height: 43px;
     margin: auto;
@@ -155,7 +153,7 @@ const Login = ({ onLogin, setIsAuthenticated }) => {
 
   return (
     <> 
-        <Logo src={logo} alt="Logo" />   
+        <Logo>WELCOME</Logo>   
     <LoginForm onSubmit={handleSubmit}>
   <Input
     type="text"
@@ -270,7 +268,7 @@ const Register = ({ onRegister }) => {
   
   return (
     <> 
-    <Logo src={logo} alt="Logo" />
+    <Logo>REGISTER</Logo>
       <RegisterForm onSubmit={handleSubmit}>
     <Input
       type="text"
