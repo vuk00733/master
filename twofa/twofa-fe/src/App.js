@@ -129,7 +129,6 @@ const Login = ({ onLogin, setIsAuthenticated }) => {
     e.preventDefault();
     onLogin({ username, password });
     setIsAuthenticated(true);
-    console.log('dd', {username, password});
     try {
       const response = await fetch('http://localhost:8080/api/users/login', {
         method: 'POST',
