@@ -1,0 +1,8 @@
+insert into apikey (id, key) values (123123, '951da96a-c5ee-4385-b71d-af81964fb82e')
+
+create table apikey (
+	id SERIAL PRIMARY KEY,
+	key VARCHAR(255)
+)
+
+select * from apikey
