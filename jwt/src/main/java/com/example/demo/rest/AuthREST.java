@@ -44,7 +44,8 @@ public class AuthREST {
     @PostMapping("/login")
     @Transactional
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO dto) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
 
@@ -77,7 +78,8 @@ public class AuthREST {
     @PostMapping("logout")
     public ResponseEntity<?> logout(@RequestBody TokenDTO dto) {
         String refreshTokenString = dto.getRefreshToken();
-        if (jwtHelper.validateRefreshToken(refreshTokenString) && refreshTokenRepository.existsById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString))) {
+        if (jwtHelper.validateRefreshToken(refreshTokenString)
+                && refreshTokenRepository.existsById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString))) {
             // valid and exists in db
             refreshTokenRepository.deleteById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString));
             return ResponseEntity.ok().build();
@@ -89,49 +91,12 @@ public class AuthREST {
     @PostMapping("logout-all")
     public ResponseEntity<?> logoutAll(@RequestBody TokenDTO dto) {
         String refreshTokenString = dto.getRefreshToken();
-        if (jwtHelper.validateRefreshToken(refreshTokenString) && refreshTokenRepository.existsById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString))) {
+        if (jwtHelper.validateRefreshToken(refreshTokenString)
+                && refreshTokenRepository.existsById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString))) {
             // valid and exists in db
 
             refreshTokenRepository.deleteByOwner_Id(jwtHelper.getUserIdFromRefreshToken(refreshTokenString));
             return ResponseEntity.ok().build();
-        }
-
-        throw new BadCredentialsException("invalid token");
-    }
-
-    @PostMapping("access-token")
-    public ResponseEntity<?> accessToken(@RequestBody TokenDTO dto) {
-        String refreshTokenString = dto.getRefreshToken();
-        if (jwtHelper.validateRefreshToken(refreshTokenString) && refreshTokenRepository.existsById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString))) {
-            // valid and exists in db
-
-            User user = userService.findById(jwtHelper.getUserIdFromRefreshToken(refreshTokenString));
-            String accessToken = jwtHelper.generateAccessToken(user);
-
-            return ResponseEntity.ok(new TokenDTO(user.getId(), accessToken, refreshTokenString));
-        }
-
-        throw new BadCredentialsException("invalid token");
-    }
-
-    @PostMapping("refresh-token")
-    public ResponseEntity<?> refreshToken(@RequestBody TokenDTO dto) {
-        String refreshTokenString = dto.getRefreshToken();
-        if (jwtHelper.validateRefreshToken(refreshTokenString) && refreshTokenRepository.existsById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString))) {
-            // valid and exists in db
-
-            refreshTokenRepository.deleteById(jwtHelper.getTokenIdFromRefreshToken(refreshTokenString));
-
-            User user = userService.findById(jwtHelper.getUserIdFromRefreshToken(refreshTokenString));
-
-            RefreshToken refreshToken = new RefreshToken();
-            refreshToken.setOwner(user);
-            refreshTokenRepository.save(refreshToken);
-
-            String accessToken = jwtHelper.generateAccessToken(user);
-            String newRefreshTokenString = jwtHelper.generateRefreshToken(user, refreshToken);
-
-            return ResponseEntity.ok(new TokenDTO(user.getId(), accessToken, newRefreshTokenString));
         }
 
         throw new BadCredentialsException("invalid token");

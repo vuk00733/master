@@ -2,6 +2,11 @@ package com.example.demo.rest;
 
 import com.example.demo.document.User;
 import com.example.demo.repository.UserRepository;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,14 +22,14 @@ public class UserREST {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/me")
-    public ResponseEntity<?> me(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(user);
-    }
-
     @GetMapping("/{id}")
     @PreAuthorize("#user.id == #id")
     public ResponseEntity<?> me(@AuthenticationPrincipal User user, @PathVariable String id) {
-        return ResponseEntity.ok(userRepository.findById(id));
+        Optional<User> dbQuery = userRepository.findById(id);
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("id", dbQuery.get().getId());
+        response.put("username", dbQuery.get().getUsername());
+        response.put("email", dbQuery.get().getEmail());
+        return ResponseEntity.ok(response);
     }
 }
