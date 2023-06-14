@@ -19,8 +19,8 @@ public class SecurityConfig {
         .anyRequest()
         .authenticated()
         .and()
-        .oauth2Login()
-        .defaultSuccessUrl("/api/v1/demo");
+        .oauth2Login();
+        // .defaultSuccessUrl("/api/v1/demo");
     return http.build();
   }
 }
